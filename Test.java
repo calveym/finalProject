@@ -12,7 +12,7 @@ public class Test {
     }
 
 
-    // set up game env
+    // reset game env
 
     public static void setup() {
 
