@@ -3,13 +3,15 @@ import java.util.Vector;
 public class Snake {
 
         private Vector<Coord> positions;
-        private int direction;
+        private int dir;
 
-        // constructor
+        // Constructor
 
         public Snake(Coord startCoordinate) {
-            direction = 0;
+            dir = 0;
             positions = new Vector<Coord>();
+            positions.add(below(below(startCoordinate)));
+            positions.add(below(startCoordinate));
             positions.add(startCoordinate);
         }
 
@@ -17,11 +19,15 @@ public class Snake {
         // Accessors
 
         public Coord head() {
-            return positions.get(0);  // returns first item in positions vector
+            return positions.firstElement();  // returns first item in positions vector
         }
 
         public Coord tail() {
-            return positions.get(positions.capacity() - 1);  // returns last item in positions vector
+            return positions.lastElement();  // returns last item in positions vector
+        }
+
+        public int direction() {
+            return dir;
         }
 
 
@@ -31,51 +37,51 @@ public class Snake {
             Coord newPos = head();
 
             // calculate which coordinate changes
-            if(direction == 0) {
-                newPos.y = y--;
-            } else if(direction == 1) {
-                newPos.x = x++;
-            } else if(direction == 2) {
-                newPos.y = y++;
-            } else if(direction == 3) {
-                newPos.x = x--;
+            if(dir == 0) {
+                newPos.y = head().y -1;
+            } else if(dir == 1) {
+                newPos.x = head().x +1;
+            } else if(dir == 2) {
+                newPos.y = head().y +1;
+            } else if(dir == 3) {
+                newPos.x = head().x -1;
             }
 
-            positions.remove(positions.capacity() - 1);  // remove tail
-            positions.add(newPos);  // add new head position
+            positions.add(0, newPos);  // add new head coordinate
+            positions.remove(positions.lastElement());  // remove tail coordinate
         }
 
 
         // Directions
 
-        public void turn(int dir) {
-            direction += dir;
-            normalize();
-        }
-
         public void left() {
-            direction = 3;
+            dir = 3;
         }
 
         public void right() {
-            direction = 1;
+            dir = 1;
         }
 
         public void up() {
-            direction = 0;
+            dir = 0;
         }
 
         public void down() {
-            direction = 2;
+            dir = 2;
         }
 
 
-        // helpers
+        // Helpers
 
         public void normalize() {
-            if(direction > 3)
-                direction = 0;
-            if(direction < 0)
-                direction = 3;
+            if(dir > 3)
+                dir = 0;
+            if(dir < 0)
+                dir = 3;
+        }
+
+        // returns coordinate below input
+        public Coord below(Coord input) {
+            return new Coord(input.x, input.y++);
         }
 }

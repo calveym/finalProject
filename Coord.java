@@ -5,4 +5,8 @@ public class Coord {
         x = a;
         y = b;
     }
+
+    public String toString() {
+        return "Coordinate: " + Integer.toString(x) + ", " + Integer.toString(y);
+    }
 }

@@ -9,17 +9,19 @@ public class TestSnake extends TestUtils {
         // ie
 
         testHead();
+        testMove();
+        testTurn();
     }
 
 
-    // reset game env
+    // reset snake env
 
     public static void setup() {
         testSnake = new Snake(new Coord(10, 10));
     }
 
 
-    // tests
+    // Tests
 
     public static void testHead() {
         setup();
@@ -34,6 +36,20 @@ public class TestSnake extends TestUtils {
         testSnake.move();
         testSnake.move();
         testSnake.move();
+
+        expect(equal((new Coord(10, 7)), testSnake.head()), "Snake not moving");
     }
 
+    public static void testTurn() {
+        setup();
+
+        testSnake.right();
+        expect(equal(1, testSnake.direction()), "Snake not turning right");
+
+        testSnake.down();
+        expect(equal(2, testSnake.direction()), "Snake not turning down");
+
+        testSnake.left();
+        expect(equal(3, testSnake.direction()), "Snake not turning left");
+    }
 }
