@@ -2,8 +2,9 @@ import java.util.Vector;
 
 public class Snake {
 
-        private Vector<Coord> positions;
-        private int dir;
+        private Vector<Coord> positions;  // this vector stores all of the coordinates
+                                          // that currently contain a snake part
+        private int dir;                  // 0- up, 1- right, 2- down, 3- left
 
         // Constructor
 
@@ -73,6 +74,7 @@ public class Snake {
 
         // Helpers
 
+        // ensures rotations wrap around
         public void normalize() {
             if(dir > 3)
                 dir = 0;
