@@ -1,5 +1,7 @@
 public class Test {
 
+    static Snake testSnake;
+
     public static void main(String[] args) {
         // setup env
 
@@ -15,7 +17,7 @@ public class Test {
     // reset game env
 
     public static void setup() {
-
+        testSnake = new Snake();
     }
 
 
@@ -29,7 +31,7 @@ public class Test {
     // utilities
 
     public static void p(String s) {
-        System.out.println(p);
+        System.out.println(s);
     }
 
 }
