@@ -1,10 +1,13 @@
 public class Test {
 
     public static void main(String[] args) {
-        setup();
-        // call testing functions here
+        // setup env
 
+        setup();
+
+        // call testing functions here
         // ie
+
         test1();
     }
 
@@ -21,6 +24,9 @@ public class Test {
     public static void test1() {
 
     }
+
+
+    // utilities
 
     public static void p(String s) {
         System.out.println(p);
