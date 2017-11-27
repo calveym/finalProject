@@ -8,20 +8,45 @@ public class Snake {
         // constructor
 
         public Snake(Coord startCoordinate) {
+            direction = 0;
             positions = new Vector<Coord>();
             positions.add(startCoordinate);
         }
 
+
+        // Accessors
+
         public Coord head() {
-            return positions.get(0);
+            return positions.get(0);  // returns first item in positions vector
         }
 
         public Coord tail() {
-            return positions.get(positions.capacity() - 1);
+            return positions.get(positions.capacity() - 1);  // returns last item in positions vector
         }
 
 
-        // use one of the following two approaches to turning:
+        // Movement
+
+        public void move() {
+            Coord newPos = head();
+
+            // calculate which coordinate changes
+            if(direction == 0) {
+                newPos.y = y--;
+            } else if(direction == 1) {
+                newPos.x = x++;
+            } else if(direction == 2) {
+                newPos.y = y++;
+            } else if(direction == 3) {
+                newPos.x = x--;
+            }
+
+            positions.remove(positions.capacity() - 1);  // remove tail
+            positions.add(newPos);  // add new head position
+        }
+
+
+        // Directions
 
         public void turn(int dir) {
             direction += dir;
@@ -50,5 +75,7 @@ public class Snake {
         public void normalize() {
             if(direction > 3)
                 direction = 0;
+            if(direction < 0)
+                direction = 3;
         }
 }
