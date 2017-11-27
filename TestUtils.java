@@ -22,9 +22,19 @@ public class TestUtils {
 
     public static void expect(boolean condition, String errorString) {
         if(!condition)
-            log("x    " + errorString);
+            log("x    " + getCallerClassName() + ": " + errorString);
         else
             log(".");
     }
 
+    public static String getCallerClassName() {
+        StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
+        for (int i=1; i<stElements.length; i++) {
+            StackTraceElement ste = stElements[i];
+            if (!ste.getClassName().equals(TestUtils.class.getName()) && ste.getClassName().indexOf("java.lang.Thread")!=0) {
+                return ste.getClassName();
+            }
+        }
+        return null;
+     }
 }
