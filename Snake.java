@@ -36,7 +36,7 @@ public class Snake {
 
         // Movement
 
-        public void move(Dimension d) {
+        public void move(int tiles) {
             Coord newPos = head();
 
             // calculate which coordinate changes
@@ -50,22 +50,21 @@ public class Snake {
                 newPos.x = head().x -1;
             }
 
-            newPos = checkBound(d, newPos); //check if out of bounds and update coords
+            newPos = checkBound(tiles, newPos); //check if out of bounds and update coords
 
             positions.add(0, newPos);  // add new head coordinate
             positions.remove(positions.lastElement());  // remove tail coordinate
         }
 
-        public Coord checkBound(Dimension d, Coord pos){
+        public Coord checkBound(int tiles, Coord pos){
             if(pos.y<0){
                 System.out.println("went over top");
-                System.out.println("height: " + d.height);
-                return new Coord(pos.x, d.height);
+                return new Coord(pos.x, tiles);
             }else if(pos.x<0){
-                return new Coord(d.width, pos.y);
-            }else if(pos.y>d.height){
+                return new Coord(tiles, pos.y);
+            }else if(pos.y>tiles){
                 return new Coord(pos.x, 0);
-            }else if(pos.x>d.width){
+            }else if(pos.x>tiles){
                 return new Coord(0, pos.y);
             }else{
                 return pos;
@@ -78,7 +77,7 @@ public class Snake {
                 Coord pos = positions.get(i);
                 int tile = m.SCREEN_WIDTH / m.TILES;
 
-                int x      = pos.x * tile;
+                int x      = pos.x * tile; 
                 int y      = pos.y * tile;
                 int width  = tile;
                 int height = tile;
