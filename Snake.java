@@ -59,9 +59,9 @@ public class Snake {
         public Coord checkBound(int tiles, Coord pos){
             if(pos.y<0){
                 System.out.println("went over top");
-                return new Coord(pos.x, tiles);
+                return new Coord(pos.x, tiles-1);
             }else if(pos.x<0){
-                return new Coord(tiles, pos.y);
+                return new Coord(tiles-1, pos.y);
             }else if(pos.y>tiles){
                 return new Coord(pos.x, 0);
             }else if(pos.x>tiles){
@@ -82,8 +82,8 @@ public class Snake {
                 int width  = tile;
                 int height = tile;
 
-                System.out.println("X: " + x);
-                System.out.println("y: " + y);
+                //System.out.println("X: " + x);
+                //System.out.println("y: " + y);
 
                 g.fillRect(x, y, width, height);
             }
