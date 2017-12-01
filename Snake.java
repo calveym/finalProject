@@ -1,4 +1,6 @@
 import java.util.Vector;
+import java.applet.*;
+import java.awt.*;
 
 public class Snake {
 
@@ -55,7 +57,7 @@ public class Snake {
         public void drawSnake(Graphics g, Main m) {
             for(int i = 0; i < positions.size(); i++) {
                 Coord pos = positions.get(i);
-                int tile = m.SCREEN_WIDTH / m.TILES
+                int tile = m.SCREEN_WIDTH / m.TILES;
 
                 int x      = pos.x * tile;
                 int y      = pos.y * tile;
