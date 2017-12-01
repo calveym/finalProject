@@ -112,14 +112,6 @@ public class Main extends Applet implements KeyListener {
     }
 
 
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    public void keyReleased(KeyEvent e) { }
-
-    public void keyTyped(KeyEvent e) { }
-
 
     public void doGameUpdates(double delta) {
         // updatey stuff
