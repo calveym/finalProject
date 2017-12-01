@@ -21,8 +21,9 @@ public class Main extends Applet implements KeyListener {
 
     public void init() {
         // prepare constant vars
-        SCREEN_HEIGHT = 600;
-        SCREEN_WIDTH = 600;
+        Dimension d = getSize();
+        SCREEN_HEIGHT = d.height;
+        SCREEN_WIDTH = d.width;
         TILES = 15;
         TARGET_FPS = 12;
         OPTIMAL_TIME = 1000000000 / TARGET_FPS;
@@ -35,9 +36,10 @@ public class Main extends Applet implements KeyListener {
         // set up ui
         setFont(new Font("TimesRoman", Font.BOLD, 14));
 
-        window = new SnakeCanvas();
+        window = new SnakeCanvas(this);
         window.setBackground(Color.orange);
         window.addKeyListener(this);
+        
         setLayout(new BorderLayout());
         add("Center", window);
         add("South", makeBottomPanel());
@@ -98,7 +100,7 @@ public class Main extends Applet implements KeyListener {
 
     public void doGameUpdates(double delta) {
         // updatey stuff
-        snake.move();
+       snake.move();
     }
 
 
@@ -122,11 +124,18 @@ public class Main extends Applet implements KeyListener {
 
 
     class SnakeCanvas extends Canvas {
+        Main parent; 
 
+        public SnakeCanvas(Main s){
+            parent =s;
+
+
+
+        }
         public void paint(Graphics g) {
             g.setColor(Color.black);
 
-            snake.drawSnake(g);
+            snake.drawSnake(g, this);
             g.fillRect(20, 20, 40, 40);
         }
 
