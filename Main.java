@@ -10,6 +10,8 @@ public class Main extends Applet implements KeyListener {
     SnakeCanvas window;
     Button restart;
     public Snake snake;
+    Collision collision;
+    Food food;
 
     // Setup constants
     int SCREEN_HEIGHT, SCREEN_WIDTH, TILES, TARGET_FPS;
@@ -47,6 +49,8 @@ public class Main extends Applet implements KeyListener {
         add("South", makeBottomPanel());
 
         snake = new Snake(new Coord(10, 10));
+        food = new Food(TILES);
+        collision = new Collision();
 
         window.repaint();
 
@@ -103,6 +107,8 @@ public class Main extends Applet implements KeyListener {
     public void doGameUpdates(double delta) {
         // updatey stuff
        snake.move(d);
+       food.checkExists();
+       collision.update(snake, food);
     }
 
 
@@ -134,6 +140,7 @@ public class Main extends Applet implements KeyListener {
             g.setColor(Color.black);
 
             snake.drawSnake(g, parent);
+            food.drawFood(g, parent);
         }
 
     }
