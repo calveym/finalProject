@@ -15,8 +15,10 @@ public class Snake {
             positions = new ArrayDeque<Coord>();
 
             positions.addFirst(startCoordinate);
-            positions.push(below(startCoordinate));
-            positions.push(below(below(startCoordinate)));
+            positions.addLast(below(startCoordinate));
+            positions.addLast(below(below(startCoordinate)));
+
+            printPositions();
         }
 
 
@@ -28,7 +30,7 @@ public class Snake {
 
         public Coord head() {
             //System.out.println(positions.size());
-            return positions.peekFirst();
+            return new Coord(positions.peekFirst().x, positions.peekFirst().y);
         }
 
 
@@ -36,9 +38,10 @@ public class Snake {
 
         public void move(int tiles) {
             System.out.println("Starts tryna move ya dig");
+            System.out.println(positions.size());
             Coord newPos = head();
 
-            // calculate which coordinate changes
+           // calculate which coordinate changes
             if(dir == 0) {
                 newPos.y = head().y -1;
             } else if(dir == 1) {
@@ -52,15 +55,16 @@ public class Snake {
                 newPos.y = head().y;
             }
 
-            newPos = checkBound(tiles, newPos); //check if out of bounds and update coords
+             newPos = checkBound(tiles, newPos); //check if out of bounds and update coords
+             printPositions();
 
-            System.out.println(newPos);
+             //System.out.println(newPos);
+            positions.addFirst(newPos);  // add new head coordinate
 
             positions.removeLast();  // remove tail coordinate
-            positions.addFirst(newPos);  // add new head coordinate
-            positions.addFirst(below(newPos));
-            System.out.println("Gets here");
-            //printPositions();
+
+           //  System.out.println("Gets here");
+          
         }
 
         public Coord checkBound(int tiles, Coord pos){
@@ -79,12 +83,12 @@ public class Snake {
         }
 
         public void drawSnake(Graphics g2, Main m) {
-            g2.setColor(Color.black);
+             g2.setColor(Color.black);
 
-            ArrayDeque<Coord> temp = positions;
+             ArrayDeque<Coord> temp = positions.clone();
 
             for(int i = 0; i < positions.size(); i++) {
-                Coord pos = positions.pop();
+                Coord pos = temp.pop();
                 int tile = m.window.size.width / m.TILES;
 
                 int x      = pos.x * tile;
@@ -92,12 +96,8 @@ public class Snake {
                 int width  = tile;
                 int height = tile;
 
-                //System.out.println("curSize: " + positions.size());
-                //System.out.println("y: " + y);
-
                 g2.fillRect(x, y, width, height);
             }
-            positions = temp;
         }
 
 
@@ -136,8 +136,8 @@ public class Snake {
         }
 
         public void printPositions() {
-            ArrayDeque<Coord> temp = positions;
-            for(int i = 0; i <= positions.size(); i++) {
+            ArrayDeque<Coord> temp = positions.clone();
+            for(int i = 0; i < positions.size(); i++) {
                 System.out.println(Integer.toString(i) + ": " + temp.pop());
             }
         }

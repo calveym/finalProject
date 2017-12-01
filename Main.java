@@ -56,7 +56,7 @@ public class Main extends Applet implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         if (keyCode == KeyEvent.VK_UP) { // up arrow
-            System.out.println("down was pressed");
+            System.out.println("up was pressed");
             snake.up();
         } else if (keyCode == KeyEvent.VK_DOWN) {
             System.out.println("down was pressed");
@@ -116,6 +116,7 @@ public class Main extends Applet implements KeyListener {
 
     public void doGameUpdates(double delta) {
         // updatey stuff
+        
         snake.move(TILES);
         food.checkExists();
         collision.update(snake, food);
