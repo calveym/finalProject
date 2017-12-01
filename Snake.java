@@ -73,7 +73,6 @@ public class Snake {
             
         }
 
-
         public void drawSnake(Graphics g, Main m) {
             for(int i = 0; i < positions.size(); i++) {
                 Coord pos = positions.get(i);
