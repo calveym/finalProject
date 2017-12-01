@@ -36,7 +36,7 @@ public class Snake {
 
         // Movement
 
-        public void move() {
+        public void move(Dimension d) {
             Coord newPos = head();
 
             // calculate which coordinate changes
@@ -53,6 +53,9 @@ public class Snake {
             positions.add(0, newPos);  // add new head coordinate
             positions.remove(positions.lastElement());  // remove tail coordinate
         }
+
+        
+        
 
         public void drawSnake(Graphics g, Main m) {
             for(int i = 0; i < positions.size(); i++) {
