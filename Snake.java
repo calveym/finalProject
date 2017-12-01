@@ -13,8 +13,8 @@ public class Snake {
         public Snake(Coord startCoordinate) {
             dir = 0;
             positions = new Vector<Coord>();
-            positions.add(below(below(startCoordinate)));
-            positions.add(below(startCoordinate));
+            //positions.add(below(below(startCoordinate)));
+            //positions.add(below(startCoordinate));
             positions.add(startCoordinate);
         }
 
@@ -50,12 +50,29 @@ public class Snake {
                 newPos.x = head().x -1;
             }
 
+            newPos = checkBound(d, newPos); //check if out of bounds and update coords
+
             positions.add(0, newPos);  // add new head coordinate
             positions.remove(positions.lastElement());  // remove tail coordinate
         }
 
-        
-        
+        public Coord checkBound(Dimension d, Coord pos){
+            if(pos.y<0){
+                System.out.println("went over top");
+                System.out.println("height: " + d.height);
+                return new Coord(pos.x, d.height);
+            }else if(pos.x<0){
+                return new Coord(d.width, pos.y);
+            }else if(pos.y>d.height){
+                return new Coord(pos.x, 0);
+            }else if(pos.x>d.width){
+                return new Coord(0, pos.y);
+            }else{
+                return pos;
+            }
+            
+        }
+
 
         public void drawSnake(Graphics g, Main m) {
             for(int i = 0; i < positions.size(); i++) {
