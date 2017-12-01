@@ -1,10 +1,10 @@
-import java.util.Vector;
+import java.util.ArrayDeque;
 import java.applet.*;
 import java.awt.*;
 
 public class Snake {
 
-        private Vector<Coord> positions;  // this vector stores all of the coordinates
+        private ArrayDeque<Coord> positions;  // this vector stores all of the coordinates
                                           // that currently contain a snake part
         private int dir;                  // 0- up, 1- right, 2- down, 3- left
 
@@ -12,56 +12,55 @@ public class Snake {
 
         public Snake(Coord startCoordinate) {
             dir = 0;
-            positions = new Vector<Coord>();
-            //positions.add(below(below(startCoordinate)));
-            positions.add(startCoordinate);
-            positions.add(below(startCoordinate));
+            positions = new ArrayDeque<Coord>();
 
+            positions.addFirst(startCoordinate);
+            positions.push(below(startCoordinate));
+            positions.push(below(below(startCoordinate)));
         }
 
 
         // Accessors
 
-        public Coord head() {
-            return positions.firstElement();  // returns first item in positions vector
-        }
-
-        public Coord tail() {
-            return positions.lastElement();  // returns last item in positions vector
-        }
-
         public int direction() {
             return dir;
+        }
+
+        public Coord head() {
+            //System.out.println(positions.size());
+            return positions.peekFirst();
         }
 
 
         // Movement
 
         public void move(int tiles) {
+            System.out.println("Starts tryna move ya dig");
             Coord newPos = head();
-            System.out.println("0: " + positions.get(0));
-            System.out.println("1: " + positions.get(1));
 
             // calculate which coordinate changes
             if(dir == 0) {
                 newPos.y = head().y -1;
             } else if(dir == 1) {
-                newPos.x = head().x +1;
+                newPos.x = positions.peek().x +1;
+                newPos.y = head().y;
             } else if(dir == 2) {
-                newPos.y = head().y +1;
+                newPos.y = positions.peek().y +1;
+                newPos.x = head().x;
             } else if(dir == 3) {
-                newPos.x = head().x -1;
+                newPos.x = positions.peek().x -1;
+                newPos.y = head().y;
             }
 
             newPos = checkBound(tiles, newPos); //check if out of bounds and update coords
 
             System.out.println(newPos);
 
-            positions.add(0, newPos);  // add new head coordinate
-            positions.remove(tail());  // remove tail coordinate
-
-            System.out.println("0: " + positions.get(0));
-            System.out.println("1: " + positions.get(1));
+            positions.removeLast();  // remove tail coordinate
+            positions.addFirst(newPos);  // add new head coordinate
+            positions.addFirst(below(newPos));
+            System.out.println("Gets here");
+            //printPositions();
         }
 
         public Coord checkBound(int tiles, Coord pos){
@@ -81,8 +80,11 @@ public class Snake {
 
         public void drawSnake(Graphics g2, Main m) {
             g2.setColor(Color.black);
+
+            ArrayDeque<Coord> temp = positions;
+
             for(int i = 0; i < positions.size(); i++) {
-                Coord pos = positions.get(i);
+                Coord pos = positions.pop();
                 int tile = m.window.size.width / m.TILES;
 
                 int x      = pos.x * tile;
@@ -90,11 +92,12 @@ public class Snake {
                 int width  = tile;
                 int height = tile;
 
-                //System.out.println("X: " + x);
+                //System.out.println("curSize: " + positions.size());
                 //System.out.println("y: " + y);
 
                 g2.fillRect(x, y, width, height);
             }
+            positions = temp;
         }
 
 
@@ -130,5 +133,12 @@ public class Snake {
         // returns coordinate below input
         public Coord below(Coord input) {
             return new Coord(input.x, input.y+1);
+        }
+
+        public void printPositions() {
+            ArrayDeque<Coord> temp = positions;
+            for(int i = 0; i <= positions.size(); i++) {
+                System.out.println(Integer.toString(i) + ": " + temp.pop());
+            }
         }
 }

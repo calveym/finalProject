@@ -52,8 +52,9 @@ public class Main extends Applet implements KeyListener {
 
         gameLoop();
     }
- public void keyPressed(KeyEvent e) {
-        int keyCode = e.getKeyCode();               
+
+    public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();
         if (keyCode == KeyEvent.VK_UP) { // up arrow
             System.out.println("down was pressed");
             snake.up();
@@ -64,7 +65,7 @@ public class Main extends Applet implements KeyListener {
            snake.left();
         } else if (keyCode == KeyEvent.VK_RIGHT ) {
             snake.right();
-        } 
+        }
     }
     public void keyReleased(KeyEvent e) { }
 
