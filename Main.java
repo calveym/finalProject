@@ -19,9 +19,11 @@ public class Main extends Applet implements KeyListener {
     boolean gameRunning;
     long fps, lastFpsTime;
 
+    Dimension d;
+
     public void init() {
         // prepare constant vars
-        Dimension d = getSize();
+        d = getSize();
         SCREEN_HEIGHT = d.height;
         SCREEN_WIDTH = d.width;
         TILES = 15;
@@ -100,7 +102,7 @@ public class Main extends Applet implements KeyListener {
 
     public void doGameUpdates(double delta) {
         // updatey stuff
-       snake.move();
+       snake.move(d);
     }
 
 
