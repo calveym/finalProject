@@ -14,20 +14,17 @@ public class Main extends Applet implements KeyListener {
     Food food;
 
     // Setup constants
-    int SCREEN_HEIGHT, SCREEN_WIDTH, TILES, TARGET_FPS;
+    int TILES, TARGET_FPS;
     long OPTIMAL_TIME;
 
     // Control variables
     boolean gameRunning;
     long fps, lastFpsTime;
 
-    Dimension d;
-
     public void init() {
         // prepare constant vars
-        d = getSize();
-        SCREEN_HEIGHT = d.height;
-        SCREEN_WIDTH = d.width;
+        window = new SnakeCanvas(this);
+
         TILES = 15;
         TARGET_FPS = 1;
         OPTIMAL_TIME = 1000000000 / TARGET_FPS;
@@ -40,19 +37,18 @@ public class Main extends Applet implements KeyListener {
         // set up ui
         setFont(new Font("TimesRoman", Font.BOLD, 14));
 
-        window = new SnakeCanvas(this);
         window.setBackground(Color.orange);
         window.addKeyListener(this); //tells canvas to listen for key presses
         window.setFocusable(true);
         setLayout(new BorderLayout());
         add("Center", window);
-        add("South", makeBottomPanel());
+        //add("South", makeBottomPanel());
 
         snake = new Snake(new Coord(10, 10));
         food = new Food(TILES);
         collision = new Collision();
 
-        window.repaint();
+        repaint();
 
         gameLoop();
     }
@@ -77,6 +73,7 @@ public class Main extends Applet implements KeyListener {
 
     // controls game loop
     public void gameLoop() {
+
         long lastLoopTime = System.nanoTime();
         long now, updateLength;
         double delta;
@@ -103,7 +100,7 @@ public class Main extends Applet implements KeyListener {
             doGameUpdates(delta);
 
             // repaint new state
-            window.repaint();
+            window.paint(getGraphics());
 
             try {
                 Thread.sleep( (lastLoopTime-System.nanoTime() + OPTIMAL_TIME) / 1000000 );
@@ -114,13 +111,21 @@ public class Main extends Applet implements KeyListener {
 
     }
 
-   
+
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    public void keyReleased(KeyEvent e) { }
+
+    public void keyTyped(KeyEvent e) { }
+
 
     public void doGameUpdates(double delta) {
         // updatey stuff
-       snake.move(TILES);
-       food.checkExists();
-       collision.update(snake, food);
+        snake.move(TILES);
+        food.checkExists();
+        collision.update(snake, food);
     }
 
 
@@ -134,7 +139,7 @@ public class Main extends Applet implements KeyListener {
 
         // setup and add to panel
         Panel temp = new Panel();
-        temp.setBackground(Color.green);
+        temp.setBackground(Color.orange);
         temp.setLayout(new GridLayout(1, 1));
         temp.add(restart);
 
@@ -143,16 +148,45 @@ public class Main extends Applet implements KeyListener {
 
 
     class SnakeCanvas extends Canvas {
+
+        Dimension size;
         Main parent;
+        Image offscreen;
+        Dimension offscreensize;
+        Graphics g2;
 
         public SnakeCanvas(Main s){
             parent = s;
+            size = new Dimension(600, 600);
         }
-        public void paint(Graphics g) {
-            g.setColor(Color.black);
 
-            snake.drawSnake(g, parent);
-            food.drawFood(g, parent);
+        public void paint(Graphics g) {
+            System.out.println("Paint");
+            update(g);
+        }
+
+        public void update(Graphics g) {
+            // initially (or when size changes) create new image
+            System.out.println("Update");
+            if ((offscreen == null)
+                || (size.width != offscreensize.width)
+                || (size.height != offscreensize.height)) {
+                offscreen = createImage(size.width, size.height);
+                offscreensize = size;
+                g2 = offscreen.getGraphics();
+                g2.setFont(getFont());
+            }
+
+            // erase old contents:
+            g2.setColor(getBackground());
+            g2.fillRect(0, 0, size.width, size.height);
+
+            // now, draw as usual, but use g2 instead of g
+            snake.drawSnake(g2, parent);
+            food.drawFood(g2, parent);
+
+            // finally, draw the image on top of the old one
+            g.drawImage(offscreen, 0, 0, null);
         }
 
     }
