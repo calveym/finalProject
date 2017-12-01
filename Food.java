@@ -37,7 +37,7 @@ public class Food {
     }
 
     public void drawFood(Graphics g, Main m) {
-        int tile = m.SCREEN_WIDTH / m.TILES;
+        int tile = m.window.size.width / m.TILES;
 
         int x = pos.x * tile;
         int y = pos.y * tile;

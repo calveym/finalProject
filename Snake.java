@@ -69,15 +69,15 @@ public class Snake {
             }else{
                 return pos;
             }
-            
         }
 
-        public void drawSnake(Graphics g, Main m) {
+        public void drawSnake(Graphics g2, Main m) {
+            g2.setColor(Color.black);
             for(int i = 0; i < positions.size(); i++) {
                 Coord pos = positions.get(i);
-                int tile = m.SCREEN_WIDTH / m.TILES;
+                int tile = m.window.size.width / m.TILES;
 
-                int x      = pos.x * tile; 
+                int x      = pos.x * tile;
                 int y      = pos.y * tile;
                 int width  = tile;
                 int height = tile;
@@ -85,7 +85,7 @@ public class Snake {
                 System.out.println("X: " + x);
                 System.out.println("y: " + y);
 
-                g.fillRect(x, y, width, height);
+                g2.fillRect(x, y, width, height);
             }
         }
 
