@@ -27,7 +27,7 @@ public class Main extends Applet implements KeyListener {
         SCREEN_HEIGHT = d.height;
         SCREEN_WIDTH = d.width;
         TILES = 15;
-        TARGET_FPS = 12;
+        TARGET_FPS = 1;
         OPTIMAL_TIME = 1000000000 / TARGET_FPS;
 
         // prepare instance vars
@@ -41,7 +41,7 @@ public class Main extends Applet implements KeyListener {
         window = new SnakeCanvas(this);
         window.setBackground(Color.orange);
         window.addKeyListener(this);
-        
+
         setLayout(new BorderLayout());
         add("Center", window);
         add("South", makeBottomPanel());
@@ -113,7 +113,6 @@ public class Main extends Applet implements KeyListener {
         // center button: remove
         restart = new Button("Restart");
         restart.setBackground(Color.cyan);
-        // restart.addActionListener(this);
 
         // setup and add to panel
         Panel temp = new Panel();
@@ -126,19 +125,15 @@ public class Main extends Applet implements KeyListener {
 
 
     class SnakeCanvas extends Canvas {
-        Main parent; 
+        Main parent;
 
         public SnakeCanvas(Main s){
-            parent =s;
-
-
-
+            parent = s;
         }
         public void paint(Graphics g) {
             g.setColor(Color.black);
 
-            snake.drawSnake(g, this);
-            g.fillRect(20, 20, 40, 40);
+            snake.drawSnake(g, parent);
         }
 
     }
