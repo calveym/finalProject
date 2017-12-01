@@ -52,6 +52,20 @@ public class Snake {
             positions.remove(positions.lastElement());  // remove tail coordinate
         }
 
+        public void drawSnake(Graphics g, Main m) {
+            for(int i = 0; i < positions.size(); i++) {
+                Coord pos = positions.get(i);
+                int tile = m.SCREEN_WIDTH / m.TILES
+
+                int x      = pos.x * tile;
+                int y      = pos.y * tile;
+                int width  = tile;
+                int height = tile;
+
+                g.fillRect(x, y, width, height);
+            }
+        }
+
 
         // Directions
 
