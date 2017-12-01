@@ -38,8 +38,8 @@ public class Main extends Applet implements KeyListener {
         setFont(new Font("TimesRoman", Font.BOLD, 14));
 
         window.setBackground(Color.orange);
-        window.addKeyListener(this);
-
+        window.addKeyListener(this); //tells canvas to listen for key presses
+        window.setFocusable(true);
         setLayout(new BorderLayout());
         add("Center", window);
         //add("South", makeBottomPanel());
@@ -52,6 +52,24 @@ public class Main extends Applet implements KeyListener {
 
         gameLoop();
     }
+ public void keyPressed(KeyEvent e) {
+        int keyCode = e.getKeyCode();               
+        if (keyCode == KeyEvent.VK_UP) { // up arrow
+            System.out.println("down was pressed");
+            snake.up();
+        } else if (keyCode == KeyEvent.VK_DOWN) {
+            System.out.println("down was pressed");
+            snake.down();
+        } else if (keyCode == KeyEvent.VK_LEFT ) {
+           snake.left();
+        } else if (keyCode == KeyEvent.VK_RIGHT ) {
+            snake.right();
+        } 
+    }
+    public void keyReleased(KeyEvent e) { }
+
+    public void keyTyped(KeyEvent e) { }
+
 
     // controls game loop
     public void gameLoop() {
@@ -93,13 +111,7 @@ public class Main extends Applet implements KeyListener {
 
     }
 
-    public void keyPressed(KeyEvent e) {
 
-    }
-
-    public void keyReleased(KeyEvent e) { }
-
-    public void keyTyped(KeyEvent e) { }
 
     public void doGameUpdates(double delta) {
         // updatey stuff
