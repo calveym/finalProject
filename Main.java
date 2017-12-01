@@ -106,7 +106,7 @@ public class Main extends Applet implements KeyListener {
 
     public void doGameUpdates(double delta) {
         // updatey stuff
-       snake.move(d);
+       snake.move(this);
        food.checkExists();
        collision.update(snake, food);
     }
