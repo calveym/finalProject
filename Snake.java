@@ -64,6 +64,9 @@ public class Snake {
                 int width  = tile;
                 int height = tile;
 
+                System.out.println("X: " + x);
+                System.out.println("y: " + y);
+
                 g.fillRect(x, y, width, height);
             }
         }
