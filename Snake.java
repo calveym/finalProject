@@ -14,8 +14,9 @@ public class Snake {
             dir = 0;
             positions = new Vector<Coord>();
             //positions.add(below(below(startCoordinate)));
-            //positions.add(below(startCoordinate));
             positions.add(startCoordinate);
+            positions.add(below(startCoordinate));
+
         }
 
 
@@ -38,6 +39,8 @@ public class Snake {
 
         public void move(int tiles) {
             Coord newPos = head();
+            System.out.println("0: " + positions.get(0));
+            System.out.println("1: " + positions.get(1));
 
             // calculate which coordinate changes
             if(dir == 0) {
@@ -52,8 +55,13 @@ public class Snake {
 
             newPos = checkBound(tiles, newPos); //check if out of bounds and update coords
 
+            System.out.println(newPos);
+
             positions.add(0, newPos);  // add new head coordinate
-            positions.remove(positions.lastElement());  // remove tail coordinate
+            positions.remove(tail());  // remove tail coordinate
+
+            System.out.println("0: " + positions.get(0));
+            System.out.println("1: " + positions.get(1));
         }
 
         public Coord checkBound(int tiles, Coord pos){
@@ -121,6 +129,6 @@ public class Snake {
 
         // returns coordinate below input
         public Coord below(Coord input) {
-            return new Coord(input.x, input.y++);
+            return new Coord(input.x, input.y+1);
         }
 }
