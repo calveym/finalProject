@@ -4,7 +4,7 @@ import java.awt.event.*;
 import java.util.*; // for Random
 import javax.swing.Timer;
 
-public class Main extends Applet implements ActionListener, KeyListener {
+public class Main extends Applet implements ActionListener {
 
     // Instance references
     InputManager input;
@@ -16,13 +16,9 @@ public class Main extends Applet implements ActionListener, KeyListener {
 
     // Setup constants
     final int TILES = 15;
-    final int TARGET_FPS = 5;
-    final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
 
     // Flow control variables
     boolean gameRunning;
-    long fps, lastFpsTime;
-    boolean[] keys = new boolean[65536];
 
     public void init() {
         // Create game instances
@@ -42,67 +38,30 @@ public class Main extends Applet implements ActionListener, KeyListener {
         window = new SnakeCanvas(this, food, snake);
         window.setBackground(Color.orange);
         window.setFocusable(true);
-        window.requestFocus();
+        window.requestFocus();        // ensures focus is on window
         window.addKeyListener(input); //tells canvas to listen for key presses
-        //add("South", makeBottomPanel());
         add("Center", window);
-
-        // prepare instance vars
-        fps = 0;
-        lastFpsTime = 0;
-        gameRunning = true;
 
         window.repaint();
 
-        //gameLoop();
+        gameLoop();
     }
 
     // controls game loop
     public void gameLoop() {
 
-        long lastLoopTime = System.nanoTime();
-        long now, updateLength;
-        double delta;
+        // get recent inputs
+        getInput();
 
-        //while(gameRunning) {
-            // Calculate time values and delta
-            now = System.nanoTime();
-            updateLength = now - lastLoopTime;
-            lastLoopTime = now;
-            delta = updateLength / ((double)OPTIMAL_TIME);
+        // updates game state
+        doGameUpdates();
 
-            // updates the frame counter
-            fps++;
-            lastFpsTime += updateLength;
-
-            // Update fps counter if second elapsed
-            if(lastFpsTime >= 1000000000) {
-                //System.out.println("(FPS: "+fps+")");
-                lastFpsTime = 0;
-                fps = 0;
-            }
-
-            // get recent inputs
-            getInput();
-
-            // updates game state
-            doGameUpdates(delta);
-
-            // repaint new state
-            window.paint(getGraphics());
-        //
-        //     try {
-        //         Thread.sleep(1000);
-        //     } catch (InterruptedException e) {
-        //         System.out.println("Error: " + e.getMessage());
-        //     }
-        // }
-
+        // repaint new state
+        window.repaint();
     }
 
-    void doGameUpdates(double delta) {
+    void doGameUpdates() {
         // updatey stuff
-
         snake.move(TILES);
         food.checkExists();
         collision.update(snake, food);
@@ -110,16 +69,8 @@ public class Main extends Applet implements ActionListener, KeyListener {
 
     public void actionPerformed(ActionEvent e) { // handles keypresses
         gameLoop();
-        window.repaint();
-        System.out.println("LAJFLK");
+        //window.repaint();
     }
-
-    public void keyPressed(KeyEvent e) {
-        keys[e.getKeyCode()] = true;
-    }
-
-    public void keyTyped(KeyEvent e) { }
-    public void keyReleased(KeyEvent e) { }
 
     void getInput() {
         boolean[] tempKeys = input.getInput();
