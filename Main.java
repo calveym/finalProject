@@ -20,36 +20,32 @@ public class Main extends Applet implements ActionListener {
     // Flow control variables
     boolean gameRunning;
 
+    // Start point
     public void init() {
         // Create game instances
-        Timer timer = new Timer(100, this);
-        timer.setInitialDelay(1900);
-        timer.start();
-
         snake = new Snake(new Coord(10, 10));
         food = new Food(TILES);
         collision = new Collision();
         input = new InputManager();
 
         // Prepare UI
-        setFont(new Font("TimesRoman", Font.BOLD, 14));
-        setLayout(new BorderLayout());
+        setupUI();
 
-        window = new SnakeCanvas(this, food, snake);
-        window.setBackground(Color.orange);
-        window.setFocusable(true);
-        window.requestFocus();        // ensures focus is on window
-        window.addKeyListener(input); //tells canvas to listen for key presses
-        add("Center", window);
+        // Schedule timer
+        Timer timer = new Timer(100, this);
+        timer.setInitialDelay(1900);
+        timer.start();
 
+        // Start game
         window.repaint();
-
         gameLoop();
     }
 
-    // controls game loop
-    public void gameLoop() {
 
+    // Game Logic
+
+    // Handles game tick
+    public void gameLoop() {
         // get recent inputs
         getInput();
 
@@ -60,36 +56,40 @@ public class Main extends Applet implements ActionListener {
         window.repaint();
     }
 
+    // updates state
     void doGameUpdates() {
-        // updatey stuff
-        snake.move(TILES);
-        food.checkExists();
+        snake.move(TILES); // moves snake along 1
+        food.checkExists(); // check food state
+
+        // run physics
         collision.update(snake, food);
     }
 
-    public void actionPerformed(ActionEvent e) { // handles keypresses
+    // Gameloop scheduler, run by timer
+    public void actionPerformed(ActionEvent e) {
         gameLoop();
-        //window.repaint();
     }
 
+    // Retrieve input from InputManager
     void getInput() {
-        boolean[] tempKeys = input.getInput();
+        boolean[] tempKeys = input.getInput(); // get pressed keys from
 
-        //System.out.println("Getting input");
+        // update snake direction based on key input
         if(tempKeys[KeyEvent.VK_UP]) {
             snake.up();
-        } else if(tempKeys[KeyEvent.VK_DOWN]) {
+        } if(tempKeys[KeyEvent.VK_DOWN]) {
             snake.down();
-        } else if(tempKeys[KeyEvent.VK_LEFT]) {
+        } if(tempKeys[KeyEvent.VK_LEFT]) {
             snake.left();
-        } else if(tempKeys[KeyEvent.VK_RIGHT]) {
+        } if(tempKeys[KeyEvent.VK_RIGHT]) {
             snake.right();
         }
     }
 
+
     // UI Helpers
 
-    // creates bottom button panel
+    // creates bottom button panel- not in use
     public Panel makeBottomPanel() {
         // center button: remove
         restart = new Button("Restart");
@@ -103,6 +103,18 @@ public class Main extends Applet implements ActionListener {
 
         return temp;
     }
+
+    // UI setup
+    void setupUI() {
+        setFont(new Font("TimesRoman", Font.BOLD, 14));
+        setLayout(new BorderLayout());
+        window = new SnakeCanvas(this, food, snake);
+        window.setBackground(Color.orange);
+        window.setFocusable(true);
+        window.requestFocus();        // ensures focus is on window
+        window.addKeyListener(input); //tells canvas to listen for key presses
+        add("Center", window);
+    }
 }
 
 class SnakeCanvas extends Canvas {
@@ -110,13 +122,13 @@ class SnakeCanvas extends Canvas {
     // References for drawing
     Snake snake;
     Food food;
-
     Dimension size;
     Main parent;
     Image offscreen;
     Dimension offscreensize;
     Graphics g2;
 
+    // Constructor
     public SnakeCanvas(Main m, Food f, Snake s){
         parent = m;
         size = new Dimension(600, 600);
@@ -124,10 +136,12 @@ class SnakeCanvas extends Canvas {
         snake = s;
     }
 
+    // Redraw canvas handling
     public void paint(Graphics g) {
         update(g);
     }
 
+    // Redraw logic
     public void update(Graphics g) {
         // initially (or when size changes) create new image
         if ((offscreen == null)
@@ -154,25 +168,29 @@ class SnakeCanvas extends Canvas {
 }
 
 class InputManager  implements KeyListener {
-    // Keypress handling
 
+    // Key array
     boolean[] keys = new boolean[65536];
 
+    // returns key array
     public boolean[] getInput() {
         boolean[] temp = keys;
         resetKeys();
         return temp;
     }
 
+    // clears key array
     void resetKeys() {
         keys = new boolean[65536];
     }
 
+    // called on keyPressed event run
     public void keyPressed(KeyEvent e) { // handles keypresses
         int keyCode = e.getKeyCode(); // gets keycode
         keys[keyCode] = true;
     }
 
+    // unused
     public void keyTyped(KeyEvent e) { }
     public void keyReleased(KeyEvent e) { }
 }
