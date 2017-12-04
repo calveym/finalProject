@@ -18,7 +18,7 @@ public class Main extends Applet implements ActionListener {
     final int TILES = 15;
 
     // Flow control variables
-    boolean gameRunning;
+    boolean running = true;
 
     // Start point
     public void init() {
@@ -46,18 +46,23 @@ public class Main extends Applet implements ActionListener {
 
     // Handles game tick
     public void gameLoop() {
-        // get recent inputs
-        getInput();
 
-        // updates game state
-        doGameUpdates();
+        if(running) {
+            // get recent inputs
+            getInput();
 
-        // repaint new state
-        window.repaint();
+            // updates game state
+            doGameUpdates();
+
+            // repaint new state
+            window.repaint();
+        }
     }
 
     // updates state
     void doGameUpdates() {
+        running = !snake.isDead();
+
         snake.move(TILES); // moves snake along 1
         food.checkExists(); // check food state
 

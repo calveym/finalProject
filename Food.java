@@ -5,11 +5,15 @@ import java.util.*; // for Random
 
 public class Food {
 
+    // Instance vars
+
     Coord pos;
     boolean exists;
     int numEaten;
     int nTiles;
     Random rand;
+
+    // Constructor
 
     public Food(int tiles) {
         nTiles = tiles;
@@ -18,15 +22,21 @@ public class Food {
         generateFood();
     }
 
+    // position accessor
     public Coord position() {
         return pos;
     }
 
+
+    // Logic
+
+    // generate new food if eaten
     public void checkExists() {
         if(!exists)
             generateFood();
     }
 
+    // generate new food
     void generateFood() {
         int x = rand.nextInt(nTiles);
         int y = rand.nextInt(nTiles);
@@ -36,6 +46,14 @@ public class Food {
         exists = true;
     }
 
+    // Consume food
+    public void eat() {
+        exists = false;
+        numEaten++;
+    }
+
+
+    // Drawing
     public void drawFood(Graphics g, Main m) {
         int tile = m.window.size.width / m.TILES;
 
@@ -44,10 +62,5 @@ public class Food {
 
         g.setColor(Color.red);
         g.fillRect(x, y, tile, tile);
-    }
-
-    public void eat() {
-        exists = false;
-        numEaten++;
     }
 }

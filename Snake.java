@@ -8,6 +8,7 @@ public class Snake {
                                       // that currently contain a snake part
     private int dir;                  // 0- up, 1- right, 2- down, 3- left
     private boolean grow;
+    private boolean dead = false;
 
     // Constructor
 
@@ -23,16 +24,41 @@ public class Snake {
 
     // Accessors
 
+    // return direction
     public int direction() {
         return dir;
     }
 
+    // return head
     public Coord head() {
         return new Coord(positions.peekFirst().x, positions.peekFirst().y);
     }
 
+    // returns snake length
+    public int length() {
+        return positions.size();
+    }
+
+    // gets clone of positions deque
+    public ArrayDeque<Coord> getPositions() {
+        return positions.clone();
+    }
+
+    public boolean isDead() {
+        return dead;
+    }
 
     // Movement
+
+    // stop next tail removal once, called in Collision
+    public void grow() {
+        grow = true;
+    }
+
+    public void die() {
+        dead = true;
+        System.out.println("Ded snek");
+    }
 
     // controls move logic
     public void move(int tiles) {
@@ -44,11 +70,6 @@ public class Snake {
             positions.removeLast();  // remove tail coordinate if not growing
         else
             grow = false;
-    }
-
-    // stop next tail removal once, called in Collision
-    public void grow() {
-        grow = true;
     }
 
     // modify coordinate that needs changing based on direction
@@ -83,16 +104,17 @@ public class Snake {
 
     // Drawing
 
+    // draw handler
     public void drawSnake(Graphics g2, Main m) {
         g2.setColor(Color.black); // reset color
-        ArrayDeque<Coord> temp = positions.clone(); // get new deque to protect original
+        ArrayDeque<Coord> temp = getPositions(); // get new deque to protect original
 
         for(int i = 0; i < positions.size(); i++) {
             drawCoord(temp.pop(), g2, m); // draw coordinate
         }
     }
 
-    // draw helper
+    // draw a Coord
     void drawCoord(Coord toDraw, Graphics g2, Main m) {
         int tile   = m.window.size.width / m.TILES;
         int x      = toDraw.x * tile;
@@ -107,39 +129,36 @@ public class Snake {
     // Directions
 
     public void left() {
-        dir = 3;
+        if(dir != 1) // stop it from going back on itself
+            dir = 3;
     }
 
     public void right() {
-        dir = 1;
+        if(dir != 3) // stop it from going back on itself
+            dir = 1;
     }
 
     public void up() {
-        dir = 0;
+        if(dir != 2) // stop it from going back on itself
+            dir = 0;
     }
 
     public void down() {
-        dir = 2;
+        if(dir != 0) // stop it from going back on itself
+            dir = 2;
     }
 
 
     // Helpers
-
-    // ensures rotations wrap around
-    public void normalize() {
-        if(dir > 3)
-            dir = 0;
-        if(dir < 0)
-            dir = 3;
-    }
 
     // returns coordinate below input
     public Coord below(Coord input) {
         return new Coord(input.x, input.y+1);
     }
 
+    // prints out all items in positions array nondestructively
     public void printPositions() {
-        ArrayDeque<Coord> temp = positions.clone();
+        ArrayDeque<Coord> temp = getPositions(); // clone for new instance
         for(int i = 0; i < positions.size(); i++) {
             System.out.println(Integer.toString(i) + ": " + temp.pop());
         }
