@@ -20,26 +20,11 @@ public class Main extends Applet implements ActionListener {
 
     // Flow control variables
     boolean running = true;
+    Timer timer;
 
     // Start point
     public void init() {
-        // Create game instances
-        snake = new Snake(new Coord(10, 10));
-        food = new Food(TILES);
-        collision = new Collision();
-        input = new InputManager();
-
-        // Prepare UI
-        setupUI();
-
-        // Schedule timer
-        Timer timer = new Timer(100, this);
-        timer.setInitialDelay(1900);
-        timer.start();
-
-        // Start game
-        window.repaint();
-        gameLoop();
+        restart();
     }
 
 
@@ -79,34 +64,41 @@ public class Main extends Applet implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         gameLoop();
 
-          if (e.getSource() instanceof Button) {
+        if (e.getSource() instanceof Button) {
             String label = ((Button)e.getSource()).getLabel();
             if(label.equals("Restart")){
-                System.out.println("Restart");
-                //srunning=false;
+               
+                //running=false;
                 restart();
             }
-          }  
+        }  
     }
 
     public void restart(){
+        if(timer != null)
+            if(timer.isRunning())
+                timer.stop();
          // Create game instances
         snake = new Snake(new Coord(10, 10));
         food = new Food(TILES);
         collision = new Collision();
         input = new InputManager();
+        running = true;
 
         // Prepare UI
-        //setupUI();
+        setupUI();
         // Start game
-        Timer timer = new Timer(100, this);
-        timer.setInitialDelay(1900);
-        timer.start();
-
+        scheduleTimer();
         window.repaint();
-       
-        running = true;
         gameLoop();
+        //running = true;
+        System.out.println("Restarted");
+    }
+
+    void scheduleTimer() {
+        timer = new Timer(100, this);
+        timer.setInitialDelay(1000);
+        timer.start();
     }
 
     // Retrieve input from InputManager
@@ -132,7 +124,7 @@ public class Main extends Applet implements ActionListener {
     public Panel makeBottomPanel() {
         // center button: remove
         restart = new Button("Restart");
-        restart.setBackground(Color.cyan);
+        restart.setBackground(Color.black);
         restart.addActionListener(this);
 
         // setup and add to panel
