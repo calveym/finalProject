@@ -24,7 +24,18 @@ public class Main extends Applet implements ActionListener {
 
     // Start point
     public void init() {
-        restart();
+        snake = new Snake(new Coord(10, 10));
+        food = new Food(TILES);
+        collision = new Collision();
+        input = new InputManager();
+
+        scheduleTimer();
+
+        setupUI();
+
+        window.repaint();
+        gameLoop();
+       
     }
 
 
@@ -32,16 +43,17 @@ public class Main extends Applet implements ActionListener {
 
     // Handles game tick
     public void gameLoop() {
-
+        //System.out.println("gameLoop");
         if(running) {
+           // System.out.println("running");
             // get recent inputs
             getInput();
-
+            
             // updates game state
             doGameUpdates();
 
             // repaint new state
-            window.repaint();
+            window.repaint(); 
         }
     }
 
@@ -56,18 +68,20 @@ public class Main extends Applet implements ActionListener {
         collision.update(snake, food);
         score.setText("score: " + food.numEaten);
         if(snake.isDead()){
-             score.setText("Game Over");
+             score.setText("Game Over. Final Score: " + food.numEaten);
+             timer.stop();
         }
     }
 
     // Gameloop scheduler, run by timer
     public void actionPerformed(ActionEvent e) {
-        gameLoop();
-
+        if(running){
+            gameLoop();
+        }
+        
         if (e.getSource() instanceof Button) {
             String label = ((Button)e.getSource()).getLabel();
             if(label.equals("Restart")){
-               
                 //running=false;
                 restart();
             }
@@ -75,22 +89,24 @@ public class Main extends Applet implements ActionListener {
     }
 
     public void restart(){
-        if(timer != null)
-            if(timer.isRunning())
-                timer.stop();
+    
          // Create game instances
         snake = new Snake(new Coord(10, 10));
-        food = new Food(TILES);
-        collision = new Collision();
-        input = new InputManager();
+        food.generateFood();
+        
         running = true;
 
+        System.out.println(timer.isRunning());
+        timer.start();
+
+        System.out.println(timer.isRunning());
         // Prepare UI
-        setupUI();
+        window.newSnake(snake, food);
         // Start game
-        scheduleTimer();
+        //scheduleTimer();
+        
         window.repaint();
-        gameLoop();
+        //gameLoop();
         //running = true;
         System.out.println("Restarted");
     }
@@ -169,6 +185,11 @@ class SnakeCanvas extends Canvas {
     public SnakeCanvas(Main m, Food f, Snake s){
         parent = m;
         size = new Dimension(600, 600);
+        food = f;
+        snake = s;
+    }
+
+    public void newSnake(Snake s, Food f) {
         food = f;
         snake = s;
     }

@@ -22,6 +22,12 @@ public class Food {
         generateFood();
     }
 
+    
+    // public void reset() {
+    //     numEaten = 0;
+    //     generateFood();
+    // }
+
     // position accessor
     public Coord position() {
         return pos;
@@ -44,6 +50,7 @@ public class Food {
         pos.x = x;
         pos.y = y;
         exists = true;
+    
     }
 
     // Consume food
