@@ -172,7 +172,7 @@ class SnakeCanvas extends Canvas {
     }
 }
 
-class InputManager  implements KeyListener {
+class InputManager implements KeyListener {
 
     // Key array
     boolean[] keys = new boolean[65536];
