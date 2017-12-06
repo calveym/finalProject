@@ -13,6 +13,7 @@ public class Main extends Applet implements ActionListener {
     public Snake snake;
     Collision collision;
     Food food;
+    Label score;
 
     // Setup constants
     final int TILES = 15;
@@ -68,10 +69,43 @@ public class Main extends Applet implements ActionListener {
 
         // run physics
         collision.update(snake, food);
+        score.setText("score: " + food.numEaten);
+        if(snake.isDead()){
+             score.setText("Game Over");
+        }
     }
 
     // Gameloop scheduler, run by timer
     public void actionPerformed(ActionEvent e) {
+        gameLoop();
+
+          if (e.getSource() instanceof Button) {
+            String label = ((Button)e.getSource()).getLabel();
+            if(label.equals("Restart")){
+                System.out.println("Restart");
+                //srunning=false;
+                restart();
+            }
+          }  
+    }
+
+    public void restart(){
+         // Create game instances
+        snake = new Snake(new Coord(10, 10));
+        food = new Food(TILES);
+        collision = new Collision();
+        input = new InputManager();
+
+        // Prepare UI
+        //setupUI();
+        // Start game
+        Timer timer = new Timer(100, this);
+        timer.setInitialDelay(1900);
+        timer.start();
+
+        window.repaint();
+       
+        running = true;
         gameLoop();
     }
 
@@ -99,12 +133,17 @@ public class Main extends Applet implements ActionListener {
         // center button: remove
         restart = new Button("Restart");
         restart.setBackground(Color.cyan);
+        restart.addActionListener(this);
 
         // setup and add to panel
+        score = new Label("Score: 0");
+        score.setAlignment(Label.CENTER);
+        score.setBackground(Color.white);
         Panel temp = new Panel();
         temp.setBackground(Color.orange);
-        temp.setLayout(new GridLayout(1, 1));
+        temp.setLayout(new GridLayout(1, 2));
         temp.add(restart);
+        temp.add(score);
 
         return temp;
     }
@@ -119,6 +158,7 @@ public class Main extends Applet implements ActionListener {
         window.requestFocus();        // ensures focus is on window
         window.addKeyListener(input); //tells canvas to listen for key presses
         add("Center", window);
+        add("South", makeBottomPanel());
     }
 }
 

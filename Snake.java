@@ -58,6 +58,7 @@ public class Snake {
     public void die() {
         dead = true;
         System.out.println("Ded snek");
+
     }
 
     // controls move logic
@@ -108,9 +109,13 @@ public class Snake {
     public void drawSnake(Graphics g2, Main m) {
         g2.setColor(Color.black); // reset color
         ArrayDeque<Coord> temp = getPositions(); // get new deque to protect original
-
+        
         for(int i = 0; i < positions.size(); i++) {
+           if(i==0){
+                g2.setColor(Color.green);
+           }
             drawCoord(temp.pop(), g2, m); // draw coordinate
+            g2.setColor(Color.black);
         }
     }
 
