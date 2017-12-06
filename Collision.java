@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.ArrayDeque;
+import java.util.LinkedHashSet;
 
 public class Collision {
 
